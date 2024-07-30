@@ -45,7 +45,7 @@ public class MyConfig {
 
 		http.authorizeHttpRequests(requests -> requests.requestMatchers("/admin/**").hasRole("ADMIN")
 				.requestMatchers("/student/**").hasRole("USER").requestMatchers("/**").permitAll())
-				.formLogin(form -> form.loginPage("/signin").loginProcessingUrl("/dologin").defaultSuccessUrl("/student/index"))
+				.formLogin(form -> form.loginPage("/signin").loginProcessingUrl("/dologin").defaultSuccessUrl("/student/index").failureUrl("/signin"))
 				.csrf(csrf -> csrf.disable());
 		return http.build();
 	}
