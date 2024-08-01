@@ -20,7 +20,7 @@
 <title>Hello, world!</title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
 		<a class="navbar-brand" href="#">SmartContactManager</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarSupportedContent"
@@ -42,27 +42,36 @@
 		</div>
 	</nav>
 
-	<div class="sidebar">
+	<div class="sidebar" style="margin-top: -0.5rem !important;">
 
 		<span onclick="toggleSidebar()" class="crossBtn">&times;</span> <a
-			href="#" class="item"> <i class="fa-solid fa-house"></i> Home
+			th:href="@{/student/index}" class="item"> <i
+			class="fa-solid fa-house"></i> Home
 		</a> <a href="#" class="item"> <i class="fa-regular fa-address-book"></i>
 			View Contacts
-		</a> <a href="#" class="item"> <i class="fa-solid fa-pen-to-square"></i>
-			Add Contacts
+		</a> <a th:href="@{/student/add-contact}" class="item"> <i
+			class="fa-solid fa-pen-to-square"></i> Add Contacts
 		</a> <a href="#" class="item"> <i class="fa-solid fa-user"></i> Your
 			Profile
 		</a> <a href="#" class="item"> <i class="fa-solid fa-gear"></i>
 			Settings
-		</a> <a href="#" class="item"> <i
+		</a> <a th:href="@{/logout}" class="item"> <i
 			class="fa-solid fa-right-from-bracket"></i> Logout
 		</a>
 		<div class="divider"></div>
 	</div>
 
-	<div class="content">
+	<div class="content" style="margin-top: 4rem !important;">
 
 		<i onclick="toggleSidebar()" class="fa-solid fa-bars"></i>
+		<!-- alert message -->
+		<div class="container" th:if="${session.message}">
+			<div class="alert alert-success text-center" role="alert" th:classappend="${'alert-'+'session.message.type'}">
+				<span th:text="${session.message.content}"></span>
+			</div>
+			<!-- <th:block th:text="${#session.removeAttribute('message')}"></th:block> -->
+		</div>
+
 		<div th:replace="${content}"></div>
 	</div>
 
