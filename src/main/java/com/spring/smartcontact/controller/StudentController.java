@@ -3,16 +3,21 @@ package com.spring.smartcontact.controller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.spring.smartcontact.entity.Contact;
 import com.spring.smartcontact.entity.Student;
 import com.spring.smartcontact.helper.Message;
+import com.spring.smartcontact.repo.ContactRepo;
 import com.spring.smartcontact.repo.StudentRepo;
 
 import jakarta.servlet.http.HttpSession;
@@ -24,6 +29,9 @@ public class StudentController {
 	@Autowired
 	private StudentRepo studentRepo;
 
+	@Autowired
+	private ContactRepo contactRepo;
+	
 	@ModelAttribute
 	public void addCommonData(Model model, Principal principal) {
 		String userName = principal.getName();
@@ -73,5 +81,27 @@ public class StudentController {
 			session.setAttribute("message", new Message("something went wrong try again", "danger"));
 		}
 		return "normal/add_contact_form";
+	}
+	
+	//handler for view contacts
+	//and show contacts per page
+	@GetMapping("/show-contacts/{page}")
+	public String showContacts(@PathVariable("page") Integer page,Model model, Principal principal) {
+		
+		model.addAttribute("title","show user contacts");
+		
+		String userName=principal.getName();
+		Student student=this.studentRepo.getStudentByUserName(userName);
+		
+		Pageable pageable=PageRequest.of(page, 3);
+		
+		Page<Contact> contacts=this.contactRepo.findContactByUser(student.getId(),pageable);
+		
+		model.addAttribute("contacts",contacts);
+		model.addAttribute("currentPage",page);
+		
+		model.addAttribute("totalpages",contacts.getTotalPages());
+		
+		return "normal/show_contacts";
 	}
 }

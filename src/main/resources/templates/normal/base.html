@@ -47,7 +47,7 @@
 		<span onclick="toggleSidebar()" class="crossBtn">&times;</span> <a
 			th:href="@{/student/index}" class="item"> <i
 			class="fa-solid fa-house"></i> Home
-		</a> <a href="#" class="item"> <i class="fa-regular fa-address-book"></i>
+		</a> <a th:href="@{/student/show-contacts/0}" class="item"> <i class="fa-regular fa-address-book"></i>
 			View Contacts
 		</a> <a th:href="@{/student/add-contact}" class="item"> <i
 			class="fa-solid fa-pen-to-square"></i> Add Contacts
@@ -61,15 +61,18 @@
 		<div class="divider"></div>
 	</div>
 
+	<!-- this is content field -->
 	<div class="content" style="margin-top: 4rem !important;">
 
 		<i onclick="toggleSidebar()" class="fa-solid fa-bars"></i>
+
 		<!-- alert message -->
 		<div class="container" th:if="${session.message}">
-			<div class="alert alert-success text-center" role="alert" th:classappend="${'alert-'+'session.message.type'}">
+			<div class="alert alert-success text-center" role="alert"
+				th:classappend="${'alert-'+'session.message.type'}">
 				<span th:text="${session.message.content}"></span>
 			</div>
-			<!-- <th:block th:text="${#session.removeAttribute('message')}"></th:block> -->
+			<th:block th:text="${@sessionHelper.removeMessageFromsession()}"></th:block>
 		</div>
 
 		<div th:replace="${content}"></div>
