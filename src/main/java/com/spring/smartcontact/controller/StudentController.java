@@ -1,6 +1,7 @@
 package com.spring.smartcontact.controller;
 
 import java.security.Principal;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,7 @@ public class StudentController {
 
 	@Autowired
 	private ContactRepo contactRepo;
-	
+
 	@ModelAttribute
 	public void addCommonData(Model model, Principal principal) {
 		String userName = principal.getName();
@@ -82,26 +83,58 @@ public class StudentController {
 		}
 		return "normal/add_contact_form";
 	}
-	
-	//handler for view contacts
-	//and show contacts per page
+
+	// handler for view contacts
+	// and show contacts per page
 	@GetMapping("/show-contacts/{page}")
-	public String showContacts(@PathVariable("page") Integer page,Model model, Principal principal) {
-		
-		model.addAttribute("title","show user contacts");
-		
-		String userName=principal.getName();
-		Student student=this.studentRepo.getStudentByUserName(userName);
-		
-		Pageable pageable=PageRequest.of(page, 3);
-		
-		Page<Contact> contacts=this.contactRepo.findContactByUser(student.getId(),pageable);
-		
-		model.addAttribute("contacts",contacts);
-		model.addAttribute("currentPage",page);
-		
-		model.addAttribute("totalpages",contacts.getTotalPages());
-		
+	public String showContacts(@PathVariable("page") Integer page, Model model, Principal principal) {
+
+		model.addAttribute("title", "show user contacts");
+
+		String userName = principal.getName();
+		Student student = this.studentRepo.getStudentByUserName(userName);
+
+		Pageable pageable = PageRequest.of(page, 3);
+
+		Page<Contact> contacts = this.contactRepo.findContactByUser(student.getId(), pageable);
+
+		model.addAttribute("contacts", contacts);
+		model.addAttribute("currentPage", page);
+
+		model.addAttribute("totalpages", contacts.getTotalPages());
+
 		return "normal/show_contacts";
+	}
+
+	// showing particular contact details
+	@GetMapping("/contact/{cId}")
+	public String showContactDetails(@PathVariable("cId") Integer cId, Model model, Principal principal) {
+
+		Optional<Contact> contactOptional = this.contactRepo.findById(cId);
+		Contact contact = contactOptional.get();
+
+		//
+		String userName = principal.getName();
+		Student student = this.studentRepo.getStudentByUserName(userName);
+
+		if (student.getId() == contact.getStudent().getId()) {
+			model.addAttribute("contact", contact);
+		}
+
+		return "normal/contact_details";
+	}
+
+	// delete contact
+	@GetMapping("/delete/{cId}")
+	public String deleteContact(@PathVariable("cId") Integer cId, HttpSession session) {
+
+		Contact contact = this.contactRepo.findById(cId).get();
+
+		// check
+		this.contactRepo.delete(contact);
+		
+		session.setAttribute("message", new Message("contact deleted successfully!!", "success"));
+
+		return "redirect:/student/show-contacts/0";
 	}
 }

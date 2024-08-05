@@ -87,3 +87,13 @@ body {
 	font-size: 36px;
 	cursor: pointer;
 }
+
+.my_profile_picture{
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+}
+
+
+
+
