@@ -137,4 +137,29 @@ public class StudentController {
 
 		return "redirect:/student/show-contacts/0";
 	}
+	
+	// show update contact
+	@PostMapping("/updateContact/{cId}")
+	public String updateContact(@PathVariable("cId") Integer cId,Model model) {
+		
+		Contact contact = this.contactRepo.findById(cId).get();
+		model.addAttribute(contact);
+		
+		return "normal/update_contact_form";
+	}
+	
+	//update contact
+	@PostMapping("/proccess-update")
+	public String updateHandler(@ModelAttribute Contact contact, HttpSession session, Principal principal) {
+		
+		try {
+			Student student= this.studentRepo.getStudentByUserName(principal.getName());
+			contact.setStudent(student);
+			this.contactRepo.save(contact);
+			session.setAttribute("message", new Message("contact updated successfully!!!","success"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/student/contact/"+contact.getCId();    
+	}
 }

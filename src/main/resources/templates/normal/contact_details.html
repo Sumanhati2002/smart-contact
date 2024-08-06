@@ -7,7 +7,7 @@
 </head>
 <body>
 	<section>
-		<div class="card mr-3 ml-3"  th:if="${contact}">
+		<div class="card mr-3 ml-3" th:if="${contact}">
 			<div class="card-body">
 				<div class="container text-center">
 					<img style="height: 200px; width: 200px;"
@@ -43,13 +43,19 @@
 						</tbody>
 					</table>
 					<div class="container mt-3">
-						<a th:href="@{'/student/delete/'+${contact.cId}}" class="btn btn-danger btn-sm btn-block">Delete</a>
-						<a class="btn btn-success btn-sm btn-block">Update</a>
+						<a th:href="@{'/student/delete/'+${contact.cId}}"
+							class="btn btn-danger btn-sm btn-block">Delete</a>
+						<form th:action="@{'/student/updateContact/'+${contact.cId}}"
+							method="post">
+							<button type="submit" class="btn btn-success btn-sm btn-block mt-2">Update</button>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-		<h1 th:unless="${contact}" class="text-center p-3 bg-danger text-white">You don't have this permission to see this contact</h1>
+		<h1 th:unless="${contact}"
+			class="text-center p-3 bg-danger text-white">You don't have this
+			permission to see this contact</h1>
 	</section>
 </body>
 </html>
