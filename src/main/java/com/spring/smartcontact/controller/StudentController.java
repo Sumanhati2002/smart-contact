@@ -162,4 +162,11 @@ public class StudentController {
 		}
 		return "redirect:/student/contact/"+contact.getCId();    
 	}
+	
+	// handler for view your profile
+	@GetMapping("/profile")
+	public String yourProfile() {
+		
+		return "normal/profile";
+	}
 }

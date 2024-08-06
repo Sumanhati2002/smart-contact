@@ -34,7 +34,7 @@
 				<li class="nav-item active"><a class="nav-link" th:href="@{/}">Home
 						<span class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link"><span
+				<li class="nav-item"><a class="nav-link" th:href="@{/student/profile}"><span
 						th:text="${student.name}"></span></a>
 				<li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a>
 				</li>
@@ -51,7 +51,7 @@
 			View Contacts
 		</a> <a th:href="@{/student/add-contact}" class="item"> <i
 			class="fa-solid fa-pen-to-square"></i> Add Contacts
-		</a> <a href="#" class="item"> <i class="fa-solid fa-user"></i> Your
+		</a> <a th:href="@{/student/profile}" class="item"> <i class="fa-solid fa-user"></i> Your
 			Profile
 		</a> <a href="#" class="item"> <i class="fa-solid fa-gear"></i>
 			Settings
